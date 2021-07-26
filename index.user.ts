@@ -352,13 +352,9 @@ function loadBlocklist() {
 }
 
 function setBlockMode(mode: Blockage["type"] | "none", user: User) {
-    const existing = blocklist.find((x) => x.user.id === user.id)
+    blocklist = blocklist.filter((x) => x.user.id !== user.id)
 
-    if (mode === "none") {
-        blocklist = blocklist.filter((x) => x.user.id !== user.id)
-    }
-
-    if (mode !== "none" && !existing) {
+    if (mode !== "none") {
         blocklist.push({ type: mode, user })
     }
 
