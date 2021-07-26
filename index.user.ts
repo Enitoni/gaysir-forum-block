@@ -166,6 +166,9 @@ function processQuotes(element: HTMLQuoteElement) {
 }
 
 function processPost(element: HTMLDivElement) {
+    // Prevent an already modified post from being modified again
+    if (element.getAttribute("data-gfb")) return
+
     const info = getPostInformation(element)
 
     const isModPost = !!element.querySelector(".mod_comment")
@@ -192,6 +195,7 @@ function processPost(element: HTMLDivElement) {
     }
 
     element.querySelectorAll("blockquote").forEach((e) => processQuotes(e))
+    element.setAttribute("data-gfb", "true")
 }
 
 /**
