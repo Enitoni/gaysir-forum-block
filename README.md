@@ -12,6 +12,10 @@ Make sure you have a userscript extension installed in your browser. The most co
 
 If the installation was successful, you will now have a "block" button in the bottom line of posts. Click this button to select the block mode for the user.
 
+-   Fade, This option will simply fade the posts out a bit, so they are less in the way. This is ideal if you wish to still be able to follow the conversation.
+
+-   Block, This option will completely block the author and post content. This also includes quotes, but only if the quote was not altered to remove the first part.
+
 Note that users you have blocked via Gaysir itself, cannot be blocked via the extension as there is no way to retrieve their id and name.
 
 ## Issues
