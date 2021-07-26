@@ -3,7 +3,7 @@
 // @name        Gaysir Forum Block
 // @author   Enitoni
 // @description A userscript that lets you hide or fade out posts from certain users on the Gaysir forum
-// @version     1.0
+// @version     1.1
 // @match       https://www.gaysir.no/*
 // @icon        https://www.google.com/s2/favicons?domain=gaysir.no
 // @copyright   2021+, Enitoni
@@ -115,6 +115,9 @@ function processQuotes(element) {
     }
 }
 function processPost(element) {
+    // Prevent an already modified post from being modified again
+    if (element.getAttribute("data-gfb"))
+        return;
     const info = getPostInformation(element);
     const isModPost = !!element.querySelector(".mod_comment");
     if (isModPost)
@@ -136,6 +139,7 @@ function processPost(element) {
         removePostButtons(element);
     }
     element.querySelectorAll("blockquote").forEach((e) => processQuotes(e));
+    element.setAttribute("data-gfb", "true");
 }
 function createRadioInput(name, value, options) {
     const container = document.createElement("div");
@@ -240,11 +244,8 @@ function loadBlocklist() {
     catch (_a) { }
 }
 function setBlockMode(mode, user) {
-    const existing = blocklist.find((x) => x.user.id === user.id);
-    if (mode === "none") {
-        blocklist = blocklist.filter((x) => x.user.id !== user.id);
-    }
-    if (mode !== "none" && !existing) {
+    blocklist = blocklist.filter((x) => x.user.id !== user.id);
+    if (mode !== "none") {
         blocklist.push({ type: mode, user });
     }
     GM_setValue("blocklist", JSON.stringify(blocklist));
