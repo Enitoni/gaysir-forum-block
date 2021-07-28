@@ -3,7 +3,7 @@
 // @name        Gaysir Forum Block
 // @author   Enitoni
 // @description A userscript that lets you hide or fade out posts from certain users on the Gaysir forum
-// @version     1.1
+// @version     1.2
 // @match       https://www.gaysir.no/*
 // @icon        https://www.google.com/s2/favicons?domain=gaysir.no
 // @copyright   2021+, Enitoni
@@ -68,6 +68,9 @@ function createBlockButton(user) {
     const anchor = document.createElement("a");
     anchor.className = "replyline_button";
     anchor.href = "";
+    anchor.style.background = "transparent";
+    anchor.style.height = "inherit";
+    anchor.style.lineHeight = "inherit";
     const icon = document.createElement("i");
     icon.innerText = "block";
     icon.className = "material-icons";
@@ -83,7 +86,6 @@ function createBlockButton(user) {
 function fadePost(element) {
     const content = element.querySelector(".innlegg_content");
     content.style.opacity = "0.3";
-    content.style.pointerEvents = "none";
 }
 // Blocks the post content by removing text and profile information
 function blockPost(element) {
@@ -99,7 +101,7 @@ function removePostButtons(element) {
     element.querySelectorAll(".replyline_button").forEach((el) => {
         var _a;
         const icon = el.querySelector("i");
-        if (["reply", "format_quote"].includes((_a = icon === null || icon === void 0 ? void 0 : icon.innerText) !== null && _a !== void 0 ? _a : "")) {
+        if (!["block"].includes((_a = icon === null || icon === void 0 ? void 0 : icon.innerText) !== null && _a !== void 0 ? _a : "")) {
             el.remove();
         }
     });

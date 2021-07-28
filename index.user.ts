@@ -2,7 +2,7 @@
 // @name        Gaysir Forum Block
 // @author   Enitoni
 // @description A userscript that lets you hide or fade out posts from certain users on the Gaysir forum
-// @version     1.1
+// @version     1.2
 // @match       https://www.gaysir.no/*
 // @icon        https://www.google.com/s2/favicons?domain=gaysir.no
 // @copyright   2021+, Enitoni
