@@ -16,6 +16,8 @@ If the installation was successful, you will now have a "block" button in the bo
 
 -   Block, This option will completely block the author and post content. This also includes quotes, but only if the quote was not altered to remove the first part.
 
+Either mode will also remove all buttons except the block button, so that the post cannot be interacted with.
+
 Note that users you have blocked via Gaysir itself, cannot be blocked via the extension as there is no way to retrieve their id and name.
 
 ## Issues
