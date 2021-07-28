@@ -124,9 +124,7 @@ function createBlockButton(user: User) {
 // Fades the post content and removes pointer events
 function fadePost(element: HTMLDivElement) {
     const content = element.querySelector<HTMLDivElement>(".innlegg_content")!
-
     content.style.opacity = "0.3"
-    content.style.pointerEvents = "none"
 }
 
 // Blocks the post content by removing text and profile information
