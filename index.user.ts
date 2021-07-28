@@ -106,6 +106,10 @@ function createBlockButton(user: User) {
     anchor.className = "replyline_button"
     anchor.href = ""
 
+    anchor.style.background = "transparent"
+    anchor.style.height = "inherit"
+    anchor.style.lineHeight = "inherit"
+
     const icon = document.createElement("i")
     icon.innerText = "block"
     icon.className = "material-icons"
@@ -145,7 +149,7 @@ function removePostButtons(element: HTMLDivElement) {
     element.querySelectorAll(".replyline_button").forEach((el) => {
         const icon = el.querySelector<HTMLDivElement>("i")
 
-        if (["reply", "format_quote"].includes(icon?.innerText ?? "")) {
+        if (!["block"].includes(icon?.innerText ?? "")) {
             el.remove()
         }
     })
