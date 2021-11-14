@@ -18,7 +18,7 @@ If the installation was successful, you will now have a "block" button in the bo
 
 Either mode will also remove all buttons except the block button, so that the post cannot be interacted with.
 
-Note that users you have blocked via Gaysir itself, cannot be blocked via the extension as there is no way to retrieve their id and name.
+Note that users you have blocked or that have blocked you via Gaysir itself, can be blocked with the extension, but since their id cannot be retrieved, it relies on the name itself, meaning they can change their name to circumvent your block.
 
 ## Issues
 

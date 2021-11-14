@@ -3,7 +3,7 @@
 // @name        Gaysir Forum Block
 // @author   Enitoni
 // @description A userscript that lets you hide or fade out posts from certain users on the Gaysir forum
-// @version     1.2
+// @version     1.3
 // @match       https://www.gaysir.no/*
 // @icon        https://www.google.com/s2/favicons?domain=gaysir.no
 // @copyright   2021+, Enitoni
@@ -13,6 +13,13 @@
 // @grant GM_getValue
 // ==/UserScript==
 let blocklist = [];
+const getBlockage = (user) => blocklist.find((x) => {
+    // The user has blocked you or is blocked by you on Gaysir itself
+    if (x.user.id === "0") {
+        return x.user.name === user.name;
+    }
+    return x.user.id === user.id;
+});
 const POLLING_RATE = 16;
 const DEFAULT_PROFILE_PIC_URL = "/img/nopic/nopic_bh_min.png";
 const BLOCKED_USERNAME = "Blocked";
@@ -54,10 +61,10 @@ function createForumPageListener(callback) {
  * Forum post logic
  */
 function getPostInformation(element) {
-    var _a, _b;
+    var _a, _b, _c, _d;
     const author = element.querySelector(".profil");
-    const name = (_a = author === null || author === void 0 ? void 0 : author.innerText) !== null && _a !== void 0 ? _a : "Blocked";
-    const [id] = (_b = author === null || author === void 0 ? void 0 : author.href.match(/([\d])+$/g)) !== null && _b !== void 0 ? _b : "0";
+    const name = (_c = (_a = author === null || author === void 0 ? void 0 : author.innerText) !== null && _a !== void 0 ? _a : (_b = element.querySelector(".profil_deaktivert")) === null || _b === void 0 ? void 0 : _b.innerText) !== null && _c !== void 0 ? _c : "Unknown";
+    const [id] = (_d = author === null || author === void 0 ? void 0 : author.href.match(/([\d])+$/g)) !== null && _d !== void 0 ? _d : "0";
     const hasQuotes = !!element.querySelector("blockquote");
     return {
         author: { id, name },
@@ -91,7 +98,8 @@ function fadePost(element) {
 function blockPost(element) {
     const image = element.querySelector(".userimg_list");
     image.style.backgroundImage = `url(${DEFAULT_PROFILE_PIC_URL})`;
-    const link = element.querySelector(".profil");
+    const link = (element.querySelector(".profil") ||
+        element.querySelector(".profil_deaktivert"));
     link.innerText = BLOCKED_USERNAME;
     const content = element.querySelector(".innlegg_comment");
     content.innerHTML = `<em>${BLOCKED_CONTENT}</em>`;
@@ -126,11 +134,11 @@ function processPost(element) {
         return;
     // Add the block button
     const line = element.querySelector(".innlegg_replyline");
-    if (info.author.id !== "0" && line) {
+    if (line) {
         line.insertBefore(createBlockButton(info.author), line.childNodes[5]);
     }
     // Perform the block
-    const blockage = blocklist.find((x) => x.user.id === info.author.id);
+    const blockage = getBlockage(info.author);
     if (blockage) {
         if (blockage.type == "fade") {
             fadePost(element);
@@ -207,7 +215,7 @@ function openModal(user) {
     text.innerText =
         "Select an option above to change the block mode for this user. The changes will only show up after a refresh or page change.";
     // Options
-    const blockage = blocklist.find((x) => x.user.id === user.id);
+    const blockage = getBlockage(user);
     const [input, getValue] = createRadioInput("block-mode", (_a = blockage === null || blockage === void 0 ? void 0 : blockage.type) !== null && _a !== void 0 ? _a : "none", [
         {
             value: "none",
@@ -246,7 +254,12 @@ function loadBlocklist() {
     catch (_a) { }
 }
 function setBlockMode(mode, user) {
-    blocklist = blocklist.filter((x) => x.user.id !== user.id);
+    blocklist = blocklist.filter((x) => {
+        if (x.user.id === "0") {
+            return x.user.name !== user.name;
+        }
+        return x.user.id !== user.id;
+    });
     if (mode !== "none") {
         blocklist.push({ type: mode, user });
     }
